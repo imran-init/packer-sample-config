@@ -13,7 +13,8 @@ echo "Checking packer config formatting..."
 
 echo "Running syntax validtion for the provided repo."
 IFS=$'\n' 
-for dir in $(find "$1" -iname "*.pkr.hcl"  | xargs -d '\n' dirname | sort | uniq); do
+# for dir in $(find "$1" -iname "*.pkr.hcl"  | xargs -d '\n' dirname | sort | uniq); do
+for dir in $(find "$1" -iname "*.pkr.hcl"  -exec dirname {} \; | sort | uniq); do
     echo "Running packer validate -syntax-only in $dir"
     pwd
     pushd "$dir" > /dev/null
