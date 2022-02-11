@@ -12,3 +12,4 @@ packer fmt -check -recursive "$1"/
 echo "Running syntax validtion for the provided repo."
 for file in $(find $1 -iname "*.pkr.hcl"); do
     echo $file
+done
