@@ -1,0 +1,104 @@
+---
+resources:
+- name: repository
+  type: git
+  source:
+    # uri: https://github.com/imran-init/packer-sample-config.git
+    uri: https://github.com/JamesWoolfenden/packer-by-example.git
+    branch: master
+    # branch: main
+
+- name: cicd
+  type: git
+  source:
+    uri: https://github.com/imran-init/packer-sample-config.git
+    branch: main
+
+    
+jobs:
+  - name: unit-test
+    plan:
+    - get: cicd
+    - get: repository
+    - task: packer-validate
+      config: 
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: hashicorp/packer
+            tag: latest
+        inputs:
+        - name: cicd
+        - name: repository
+
+        
+        run:
+          path: ./cicd/packer_validate.sh
+          args:
+          - repository
+  #   - task: review-results
+  #     config:
+  #       platform: linux
+  #       image_resource:
+  #         type: docker-image
+  #         source: {repository: ubuntu}
+  #       inputs:
+  #       - name: test-results
+  #       run:
+  #           path: find
+  #           args: [.]
+  # - name: package-app   
+  #   plan:
+  #     - get: source-code
+  #       passed: [unit-test]
+  #       trigger: true
+  #     - task: publish-code
+  #       config:
+  #         platform: linux
+  #         image_resource:
+  #           type: docker-image
+  #           source: 
+  #             repository: mcr.microsoft.com/dotnet/core/sdk
+  #             tag: 2.2
+  #         inputs:
+  #         - name: source-code
+  #         outputs:
+  #         - name: compiled-app
+  #         - name: packaged-core-app
+  #         run:
+  #             path: sh
+  #             args:
+  #             - -exec
+  #             - |
+  #               dotnet publish ./source-code/pluralsight-concourse-dotnetcore.csproj -o .././compiled-app
+  #               tar -czvf ./packaged-core-app/app.tar.gz ./compiled-app
+  #               ls
+  #               cd packaged-core-app
+  #               ls  
+  #     - put: artifact-repository
+  #       params:
+  #         file: packaged-core-app/app.tar.gz
+  # - name: deploy-app
+  #   plan:
+  #   - get: artifact-repository
+  #     passed: [package-app]
+  #     trigger: true
+  #   - task: unpack-code
+  #     config:
+  #         platform: linux
+  #         image_resource:
+  #           type: docker-image
+  #           source: {repository: ubuntu}
+  #         inputs:
+  #         - name: artifact-repository
+  #         outputs:
+  #         - name: extracted-package
+  #         run:
+  #             path: sh
+  #             args: 
+  #               - -exec
+  #               - |
+  #                 tar -xzvf ./artifact-repository/app.tar.gz -C ./extracted-package
+  #                 find .
+# fly -t ps set-pipeline -c mod3-pipeline-1.yml -p mod3-pipeline-1 --load-vars-from creds.yml
