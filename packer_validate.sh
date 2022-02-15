@@ -11,7 +11,7 @@ echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
-for dir in $(echo "$ARR" | xargs -n1 dirname | sort | uniq; do
+for dir in $(echo "$ARR" | xargs -n1 dirname | sort | uniq); do
 echo "${dir}";
 done 
 
