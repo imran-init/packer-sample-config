@@ -4,13 +4,16 @@ set -e
 
 set -o pipefail
 
+[ -d "$1" ] || (EXIT_CODE=$? && echo "Directory does not exist. Exiting with error." && exit "${EXIT_CODE}")
+
 echo "Echoing ENV Vars."
 echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
 for a in "${ARR[@]}"; do
-    echo "${a}";
+    for dir in $(for path in "${ARR[@]}"; do echo "repository/${path}"; done | sort | uniq); do
+      echo "--> Running 'packer fmt -check -recursive' in current directory '${dir}'"
 done
 
 case $ACTION in 
@@ -29,7 +32,7 @@ esac
 
 # EXIT_CODE=0
 
-# [ -d "$1" ] || (EXIT_CODE=$? && echo "Directory does not exist. Exiting with error." && exit "${EXIT_CODE}")
+# 
 
 # echo "Checking packer config formatting..."
 # packer fmt -check -recursive "$1"
