@@ -11,7 +11,7 @@ echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
-for path in "${ARR[@]}"; do echo "${path}"; done | sort | uniq;
+for path in "${ARR[@]}"; do echo "${path}"; done 
 
 case $ACTION in 
     fmt)
