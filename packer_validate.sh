@@ -2,26 +2,43 @@
 
 set -e
 
+set -o pipefail
+
 echo "Echoing ENV Vars."
-echo "FILES: $FILES"
-echo "ACTION: $ACTION"
+echo "FILES: ${FILES}"
+echo "ACTION: ${ACTION}"
+echo "ARR: ${ARR[@]}"
 
-EXIT_CODE=0
+case $ACTION in 
+    fmt)
+        echo "fmt was sent"
 
-[ -d "$1" ] || (EXIT_CODE=$? && echo "Directory does not exist. Exiting with error." && exit $EXIT_CODE)
+        ;;
+    validate)
+        echo "validate was sent"
+        ;;
+    *)
+        echo "Invalid value for ACTION. Exiting ...";
+        exit 22;
+        ;;
+esac
 
-echo "Checking packer config formatting..."
-packer fmt -check -recursive "$1"
+# EXIT_CODE=0
+
+# [ -d "$1" ] || (EXIT_CODE=$? && echo "Directory does not exist. Exiting with error." && exit "${EXIT_CODE}")
+
+# echo "Checking packer config formatting..."
+# packer fmt -check -recursive "$1"
 
 
 
-echo "Running syntax validtion for the provided repo."
-IFS=$'\n' 
-# for dir in $(find "$1" -iname "*.pkr.hcl"  | xargs -d '\n' dirname | sort | uniq); do
-for dir in $(find "$1" -iname "*.pkr.hcl"  -exec dirname {} \; | sort | uniq); do
-    echo "Running packer validate -syntax-only in $dir"
-    pwd
-    pushd "$dir" > /dev/null
-    packer validate -syntax-only .
-    popd
-done
+# echo "Running syntax validtion for the provided repo."
+# IFS=$'\n' 
+# # for dir in $(find "$1" -iname "*.pkr.hcl"  | xargs -d '\n' dirname | sort | uniq); do
+# for dir in $(find "$1" -iname "*.pkr.hcl"  -exec dirname {} \; | sort | uniq); do
+#     echo "Running packer validate -syntax-only in ${dir}"
+#     pwd
+#     pushd "${dir}" > /dev/null
+#     packer validate -syntax-only .
+#     popd
+# done
