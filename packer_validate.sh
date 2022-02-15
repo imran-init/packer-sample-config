@@ -9,6 +9,10 @@ echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
+for a in "${ARR[@]}"; do
+    echo "${a}";
+done
+
 case $ACTION in 
     fmt)
         echo "fmt was sent"
