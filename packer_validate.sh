@@ -4,30 +4,37 @@ set -e
 
 set -o pipefail
 
-[ -d "$1" ] || (EXIT_CODE=$? && echo "Directory does not exist. Exiting with error." && exit "${EXIT_CODE}")
-
 echo "Echoing ENV Vars."
 echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
-echo "ARR: ${ARR[@]}"
 
-for dir in $(echo "$ARR" | xargs -n1 dirname | sort | uniq); do
-echo "${dir}";
-done 
+if [[ "${ACTION}" == "fmt" || "${ACTION}" == "" ]]; then
+    echo "fmt was sent"
+    FMT_ERROR=0
+    for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
+    echo "--> Running 'packer fmt -check -recursive' in directory '$dir'"
+    pushd "${dir}" >/dev/null
+    packer fmt -check -recursive . || FMT_ERROR=$?
+    popd >/dev/null
+    done
+    exit ${FMT_ERROR}
+fi
 
-case $ACTION in 
-    fmt)
-        echo "fmt was sent"
+if [[ "${ACTION}" == "validate" || "${ACTION}" == "" ]]; then
+    echo "validate was sent"
+    VALIDATE_ERROR=0
+    for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
+    echo "--> Running 'packer validate -syntac-only' in directory '$dir'"
+    pushd "${dir}" >/dev/null
+    packer validate -syntax-only . || VALIDATE_ERROR=$?
+    popd >/dev/null
+    done
+    exit ${VALIDATE_ERROR}
 
-        ;;
-    validate)
-        echo "validate was sent"
-        ;;
-    *)
-        echo "Invalid value for ACTION. Exiting ...";
-        exit 22;
-        ;;
-esac
+fi
+
+exit 22
+
 
 # EXIT_CODE=0
 
