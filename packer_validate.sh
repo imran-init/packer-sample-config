@@ -8,6 +8,11 @@ echo "Echoing ENV Vars."
 echo "FILES: ${FILES}"
 echo "OPERATION: ${OPERATION}"
 
+if ! { [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; }; then
+    echo "Not a valid choice."
+    exit 1;
+fi
+
 if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
     FMT_ERROR=0
     for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
