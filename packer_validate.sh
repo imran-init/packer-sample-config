@@ -11,9 +11,9 @@ echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
-for a in "${ARR[@]}"; do
-    for dir in $(for path in "${ARR[@]}"; do echo "repository/${path}"; done | sort | uniq); do
-      echo "--> Running 'packer fmt -check -recursive' in current directory '${dir}'"
+
+for dir in $(for path in "${ARR[@]}"; do echo "repository/${path}"; done | sort | uniq); do
+    echo "--> Running 'packer fmt -check -recursive' in current directory '${dir}'"
 done
 
 case $ACTION in 
