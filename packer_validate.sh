@@ -9,13 +9,12 @@ echo "FILES: ${FILES}"
 echo "OPERATION: ${OPERATION}"
 
 if ! { [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; }; then
-    echo "Not a valid choice."
+    echo 'Invalid value for OPERATION. Valid values are "fmt", "validate", and "".'
     exit 1;
 fi
 
 if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
-    FMT_ERROR=0
-    for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
+    for dir in $(echo "${FILES}" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer fmt -check -recursive' in directory 'repository/${dir}'"
     pushd "repository/${dir}" >/dev/null
     packer fmt -check -recursive . || exit $?
@@ -25,8 +24,7 @@ if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
 fi
 
 if [[ "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; then
-    VALIDATE_ERROR=0
-    for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
+    for dir in $(echo "${FILES}" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer validate -syntac-only' in directory 'repository/${dir}'"
     pushd "repository/${dir}" >/dev/null
     packer validate -syntax-only . || exit $?

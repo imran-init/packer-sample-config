@@ -1,0 +1,15 @@
+platform: linux
+image_resource:
+name: ""
+source:
+    repository: hashicorp/packer
+    tag: latest
+type: docker-image
+inputs:
+- name: cicd
+- name: repository
+# params:
+#   OPERATION: ""
+#   FILES: ""
+run:
+    path: ./cicd/packer_validate.sh
