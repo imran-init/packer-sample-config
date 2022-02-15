@@ -6,10 +6,9 @@ set -o pipefail
 
 echo "Echoing ENV Vars."
 echo "FILES: ${FILES}"
-echo "ACTION: ${ACTION}"
+echo "OPERATION: ${OPERATION}"
 
-if [[ "${ACTION}" == "fmt" || "${ACTION}" == "" ]]; then
-    echo "fmt was sent"
+if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
     FMT_ERROR=0
     for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer fmt -check -recursive' in directory 'repository/${dir}'"
@@ -20,8 +19,7 @@ if [[ "${ACTION}" == "fmt" || "${ACTION}" == "" ]]; then
     exit ${FMT_ERROR}
 fi
 
-if [[ "${ACTION}" == "validate" || "${ACTION}" == "" ]]; then
-    echo "validate was sent"
+if [[ "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; then
     VALIDATE_ERROR=0
     for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer validate -syntac-only' in directory 'repository/${dir}'"
@@ -33,7 +31,9 @@ if [[ "${ACTION}" == "validate" || "${ACTION}" == "" ]]; then
 
 fi
 
-exit 22
+echo "Exiting with error. OPERATION value is invalid."
+
+exit 1
 
 
 # EXIT_CODE=0
