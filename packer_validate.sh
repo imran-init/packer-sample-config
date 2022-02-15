@@ -11,7 +11,9 @@ echo "FILES: ${FILES}"
 echo "ACTION: ${ACTION}"
 echo "ARR: ${ARR[@]}"
 
-for path in "${ARR[@]}"; do echo "${path}"; done 
+for dir in $(echo "$ARR" | xargs -n1 dirname | sort | uniq; do
+echo "${dir}";
+done 
 
 case $ACTION in 
     fmt)
