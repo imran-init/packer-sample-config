@@ -13,10 +13,10 @@ if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
     for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer fmt -check -recursive' in directory 'repository/${dir}'"
     pushd "repository/${dir}" >/dev/null
-    packer fmt -check -recursive . || FMT_ERROR=$?
+    packer fmt -check -recursive . || exit $?
     popd >/dev/null
     done
-    exit ${FMT_ERROR}
+    # exit ${FMT_ERROR}
 fi
 
 if [[ "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; then
@@ -24,16 +24,16 @@ if [[ "${OPERATION}" == "validate" || "${OPERATION}" == "" ]]; then
     for dir in $(echo "$FILES" | xargs -n1 dirname | sort -u | uniq); do
     echo "--> Running 'packer validate -syntac-only' in directory 'repository/${dir}'"
     pushd "repository/${dir}" >/dev/null
-    packer validate -syntax-only . || VALIDATE_ERROR=$?
+    packer validate -syntax-only . || exit $?
     popd >/dev/null
     done
-    exit ${VALIDATE_ERROR}
+    # exit ${VALIDATE_ERROR}
 
 fi
 
-echo "Exiting with error. OPERATION value is invalid."
+# echo "Exiting with error. OPERATION value is invalid."
 
-exit 1
+# exit 1
 
 
 # EXIT_CODE=0
@@ -41,7 +41,7 @@ exit 1
 # 
 
 # echo "Checking packer config formatting..."
-# packer fmt -check -recursive "$1"
+# packer fmt -check -recursive "cdcd
 
 
 
