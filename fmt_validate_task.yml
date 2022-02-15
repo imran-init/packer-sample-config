@@ -1,10 +1,10 @@
 platform: linux
 image_resource:
-name: ""
-source:
-    repository: hashicorp/packer
-    tag: latest
-type: docker-image
+    name: ""
+    source:
+        repository: hashicorp/packer
+        tag: latest
+    type: docker-image
 inputs:
 - name: cicd
 - name: repository
