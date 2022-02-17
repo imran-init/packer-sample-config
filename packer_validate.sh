@@ -11,7 +11,7 @@ if ! { [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "validate" || "${OPERATIO
     exit 1;
 fi
 
-for path in "${PATHS}"; do
+for path in ${PATHS}; do
     if [[ "${OPERATION}" == "fmt" || "${OPERATION}" == "" ]]; then
         echo "--> Running 'packer fmt -check -recursive repository/${path}'"
         packer fmt -check -recursive "repository/${path}" || exit $?

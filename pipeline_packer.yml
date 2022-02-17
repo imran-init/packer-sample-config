@@ -21,7 +21,7 @@ jobs:
     params:
       # valid values: (fmt|validate|''), the default empty value will build both types.
       OPERATION: ""
-      PATHS: ""
+      PATHS: ". subfolder"
       # FILES: "hcl2/ubuntu/variables.pkr.hcl"
     file: cicd/fmt_validate_task.yml
     # config:
