@@ -13,5 +13,5 @@ params:
   OPERATION: ""
   FILES: ""
 run:
-    path: ./cicd/packer_validate.sh
+    path: ../cicd/packer_validate.sh
     dir: repository
