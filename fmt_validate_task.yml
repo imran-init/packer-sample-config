@@ -14,3 +14,4 @@ params:
   FILES: ""
 run:
     path: ./cicd/packer_validate.sh
+    directory: repository
